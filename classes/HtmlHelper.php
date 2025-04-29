@@ -24,7 +24,7 @@ class HtmlHelper
                 $htmlTable .= '<tr>';
 
                 $htmlTable .= '<td>' . $department->getId() . '</td>';
-                $htmlTable .= '<td>' . $department->getName() . '</td>';
+                $htmlTable .= '<td>' .$department->linkToSelf . '</td>';
                 $htmlTable .= '<td>' . $department->delete . '</td>';
                 $htmlTable .= '<td>' . $department->zeigeeingabe . '</td>';
                 $htmlTable .= '</tr>';
@@ -42,9 +42,26 @@ class HtmlHelper
             // damit erstelle ich den Löschknopf
             $user->delete = '<a href="index.php?action=delete&id=' . $user->getId() . '&area=' . $area . '"><button>LÖSCHEN</button></a>';
             $user->zeigeeingabe = '<a href="index.php?action=aendern&id=' . $user->getId() . '&area=' . $area . '"><button>ändern</button></a>';
+            $user->linkToSelf = '<a href="index.php?action=show&id='.$user->getId() .'&area='.$area.'">'.$user->getName().  '</a>';
         }
 
         return $users;
+    }
+
+
+    public static function departmentView(Department $department): string
+    {
+        $html = '<div>';
+        $html .="<div>". $department->getId() ;
+        $html .= '</div>';
+        $html .="<div>". $department->getName() ;
+        $html .= '</div>';
+        $html .="<div> Mitarbeiter" ;
+        $html .= '</div>';
+
+        $html .= '</div>';
+
+        return $html;
     }
 
 }

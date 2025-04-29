@@ -5,6 +5,7 @@ class Department implements ICrud
     private int $id;
     private string $name;
 
+
     function __construct(int $id_paltzhalter = null, string $name_platzhalter = null)
     {
         if (isset($id)) {
@@ -13,10 +14,7 @@ class Department implements ICrud
         }
     }
 
-    public function setId(int $id): void
-    {
-        $this->id = $id;
-    }
+
     public function setName(string $name): void
     {
         $this->name = $name;
@@ -36,8 +34,9 @@ class Department implements ICrud
     }
 
     // erstellt Department-Objekt, Name von user-Eingabe, id von der Datenbank
-    function createDepartment(string $name):Department
+    public static function createObject() :Department
     {
+        $name = $_POST['name'];
         $dbcon = Db::getDbConnection();
         $stmnt = "INSERT INTO department (name) 
                   VALUES (:name)";
@@ -52,7 +51,7 @@ class Department implements ICrud
      * @return Department[]
      * @throws Exception
      */
-    public function getAllAsObjects(): array
+    static public function getAllAsObjects(): array
     {
         $dbcon = Db::getDbConnection();
         $stmnt = "SELECT * FROM department";
@@ -61,9 +60,10 @@ class Department implements ICrud
 
         return $select_stm->fetchAll(PDO::FETCH_CLASS, 'Department');
     }
-    public function deleteObjectById(int $id): bool
+    public function delete(): bool
     {
         try {
+            $id = $this->getId();
             // Datensatz löschen
             $dbcon = Db::getDbConnection();
             $stmnt = "DELETE FROM department WHERE id=:id";
@@ -87,7 +87,7 @@ class Department implements ICrud
         }
     }
 
-    public function getObjectById(int $id): ?object
+    public static function getObjectById(int $id): ?object
     {
         try {
             $dbcon = Db::getDbConnection();
@@ -105,15 +105,28 @@ class Department implements ICrud
     }
 
 
-    function updateById(int $id, array $data): bool
+    function update(): bool
     {
-
+        $id = $this->getId();
         $dbcon = Db::getDbConnection();
         $stmnt = "Update department set name= :name where id = :id";
         $request = $dbcon->prepare($stmnt);
-        $request->bindParam(':name',$data['name'],PDO::PARAM_STR);
+        $request->bindParam(':name',$_POST['name'],PDO::PARAM_STR);
         $request->bindParam(':id',$id,PDO::PARAM_INT);
         $request->execute();
         return true;
     }
+
+
+    static function validateName(string $name): bool
+    {
+        if (strlen($name) >= 2){
+            return true;
+        }
+        return false;
+    }
+
+
+
+
 }

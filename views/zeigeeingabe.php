@@ -20,7 +20,7 @@ include 'views/nav.php';
 <form method="post" action="index.php">
     <input type="hidden" name="area" value="<?php echo $area; ?>">
     <input type="hidden" name="action" value="<?php if (!isset($department)) {
-        echo 'eingabe';
+        echo 'create';
     } else {
         echo 'update';
     } ?>">
@@ -28,7 +28,8 @@ include 'views/nav.php';
     <table>
         <tr>
             <td><label for="name">Name:</label></td>
-            <td><input type="text" id="name" name="name" value="<?php if (isset($department)){ echo $department->getName();} else {echo '';} ?>"></td>
+            <td><input type="text" id="name" name="name" value="<?php if (isset($department)){ echo $department->getName();} else {echo $name;} ?>"></td>
+            <td><?php echo $err ?></td>
         </tr>
         <tr>
             <td></td>

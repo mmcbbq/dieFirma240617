@@ -2,14 +2,14 @@
 
 interface ICrud
 {
-    function getAllAsObjects(): array;
+    static function getAllAsObjects(): array;
 
-    function deleteObjectById(int $id): bool;
+    function delete(): bool;
 
-    function getObjectById(int $id): ?object;
+    static function getObjectById(int $id): ?object;
 
-    function updateById(int $id, array $data): bool;
+    function update(): bool;
 
-    function createObject():?object;
+    static function createObject():?object;
 
 }
