@@ -1,6 +1,6 @@
 <?php
 
-class Db
+abstract class Db
 {
     static function getDbConnection(): ?PDO
     {
@@ -9,5 +9,15 @@ class Db
         } catch (PDOException $e) {
             throw new Exception($e);
         }
+    }
+
+
+    public function query($query, $data =[]):array
+    {
+        $con = $this->getDbConnection();
+        $stm = $con->prepare($query);
+        $check = $stm->execute($data);
+        $result = $stm->fetchAll(PDO::FETCH_CLASS,get_class($this));
+        return $result;
     }
 }

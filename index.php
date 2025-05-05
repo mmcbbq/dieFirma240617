@@ -7,9 +7,12 @@ spl_autoload_register(function ($className) {
 });
 
 
+$class = new Model();
+$department = new Department();
+$department->setName('mvc');
+$department = $class->create($department);
+var_dump($department);
 
-
-var_dump($_SERVER['REQUEST_METHOD']);
 
 
 // Variablenempfang
