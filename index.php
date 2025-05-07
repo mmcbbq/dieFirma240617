@@ -7,11 +7,6 @@ spl_autoload_register(function ($className) {
 });
 
 
-
-
-var_dump($_SERVER['REQUEST_METHOD']);
-
-
 // Variablenempfang
 $firstName = $_POST['firstName'] ?? '';
 $lastName = $_POST['lastName'] ?? '';
@@ -23,20 +18,31 @@ $area = $_REQUEST['area'] ?? 'department';
 $name = $_POST['name'] ?? '';
 $err = "";
 //$view = $action; // Standardwert
-echo '<pre>';
-print_r($_REQUEST);
-echo '</pre>';
+
+
+//echo '<pre>';
+//$alleuser = User::getAllAsObjects();
+//var_dump($alleuser[0]->getVorname());
+//echo '</pre>';
 
 try {
 
-    if ($action === 'show' and $area === "department"){
+    if ($action === 'show' and $area === "department") {
         $department = Department::getObjectById($id);
         $view = 'show';
-    }
-
-    elseif ($action == 'showList' and $area === 'department') {
+    } elseif ($action == 'showList' and $area === 'department') {
         $departments = Department::getAllAsObjects();
         $departments = HtmlHelper::addDeleteAndUpdate($departments, $area);
+        $htmlTable = HtmlHelper::buildHTMLFromArrays($departments, $area);
+
+        $view = 'showList';
+
+
+    } elseif ($action == 'showList' and $area === 'user') {
+        $user = User::getAllAsObjects();
+        $user = HtmlHelper::addDeleteAndUpdate($user, $area);
+        $htmlTable = HtmlHelper::buildHTMLFromArrays($user, $area);
+
         $view = 'showList';
 
     } elseif ($action === 'delete' and $area === 'department') {
@@ -46,6 +52,13 @@ try {
         $departments = Department::getAllAsObjects();
         $departments = HtmlHelper::addDeleteAndUpdate($departments, $area);
 
+    } elseif ($action === 'delete' and $area === 'user') {
+        $user = User::getObjectById($id);
+        $user->delete();
+        $view = 'showList';
+        $users = User::getAllAsObjects();
+        $users = HtmlHelper::addDeleteAndUpdate($users, $area);
+        $htmlTable = HtmlHelper::buildHTMLFromArrays($users, $area);
     } elseif ($action === 'update' and $area === 'department') {
         $department = Department::getObjectById($id);
         $department->update();
@@ -54,28 +67,31 @@ try {
         $departments = HtmlHelper::addDeleteAndUpdate($departments, $area);
 
     } elseif ($action === 'aendern' and $area === 'department') {
-            $department = Department::getObjectById($id);
+        $department = Department::getObjectById($id);
         $view = 'zeigeeingabe';
 //
-    } elseif ($action === "create" and $area === 'department'){
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' and Department::validateName($name)){
+    } elseif ($action === "create" and $area === 'department') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' and Department::validateName($name)) {
             Department::createObject();
             $departments = Department::getAllAsObjects();
             $departments = HtmlHelper::addDeleteAndUpdate($departments, $area);
             $view = 'showList';
-        } else{
-            if (!Department::validateName($name)  and isset($_POST['name'])){
+        } else {
+            if (!Department::validateName($name) and isset($_POST['name'])) {
                 $err = "Name ist zu kurz";
             }
             $view = 'zeigeeingabe';
         }
-//        ;
-//
-//    } elseif ($action === "eingabe" and $area === 'department'){
-//
 
 
-
+    } elseif ($action === "create" and $area === 'user') {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            User::createObject();
+            $user = User::getAllAsObjects();
+            $user = HtmlHelper::addDeleteAndUpdate($user, $area);
+            $view = 'showList';
+        }
+        $view = 'zeigeeingabeUser';
     }
 } catch (Exception $e) {
     // zum Auslesen, was in der Exception alles drinsteht

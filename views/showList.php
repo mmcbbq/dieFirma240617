@@ -1,6 +1,3 @@
-<?php
-$htmlTable = HtmlHelper::buildHTMLFromArrays($departments, $area);
-?>
 <!doctype html>
 <html lang="en">
 <head>

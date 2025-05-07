@@ -13,15 +13,11 @@ class Department implements ICrud
             $this->name = $name_platzhalter;
         }
     }
-
-
     public function setName(string $name): void
     {
         $this->name = $name;
     }
-    //public string $delete;
 
-    //public string $zeigeeingabe;
 
     public function getId(): int
     {
