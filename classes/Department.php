@@ -4,6 +4,7 @@ class Department implements ICrud
 {
     private int $id;
     private string $name;
+    private array $users;
 
 
     function __construct(int $id_paltzhalter = null, string $name_platzhalter = null)
@@ -11,11 +12,17 @@ class Department implements ICrud
         if (isset($id)) {
             $this->id = $id_paltzhalter;
             $this->name = $name_platzhalter;
+            $this->users = $this->getUsersFromDb();
         }
     }
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getUsers():array
+    {
+        return$this->users;
     }
 
 
@@ -28,6 +35,7 @@ class Department implements ICrud
     {
         return $this->name;
     }
+
 
     // erstellt Department-Objekt, Name von user-Eingabe, id von der Datenbank
     public static function createObject() :Department
@@ -120,6 +128,24 @@ class Department implements ICrud
             return true;
         }
         return false;
+    }
+
+
+    public function getUsersFromDb():array
+    {
+            $id = $this->getId();
+            $dbcon = Db::getDbConnection();
+            $stmnt = "SELECT * FROM user WHERE department_id=:id";
+            $request = $dbcon->prepare($stmnt);
+            $request->bindParam(":id", $id, PDO::PARAM_INT);
+            $request->execute();
+            $userarray = [];
+            foreach ($request->fetchAll(PDO::FETCH_ASSOC) as $item)
+            {
+                $userarray[] = new User($item['bday'],$item['id'],$item['nachname'],$item['vorname'], $item['department_id']);
+            }
+            return $userarray;
+
     }
 
 

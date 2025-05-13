@@ -21,8 +21,8 @@ $err = "";
 
 
 //echo '<pre>';
-//$alleuser = User::getAllAsObjects();
-//var_dump($alleuser[0]->getVorname());
+//$alleuser = Department::getAllAsObjects();
+//var_dump($alleuser[0]->getUsersFromDb());
 //echo '</pre>';
 
 try {

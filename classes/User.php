@@ -7,6 +7,7 @@ class User implements ICrud
     private string $vorname;
     private string $nachname;
     private DateTime $bday;
+    private Department $department;
 
     /**
      * @param string $bday
@@ -14,12 +15,13 @@ class User implements ICrud
      * @param string $nachname
      * @param string $vorname
      */
-    public function __construct(string $bday, int $id, string $nachname, string $vorname)
+    public function __construct(string $bday, int $id, string $nachname, string $vorname, int $departmentId)
     {
         $this->bday = new DateTime($bday);
         $this->id = $id;
         $this->nachname = $nachname;
         $this->vorname = $vorname;
+        $this->departmentId = $departmentId;
     }
 
     public function getBday(): DateTime
@@ -63,6 +65,25 @@ class User implements ICrud
     }
 
 
+public function getDepartmentId():int 
+{
+    return $this->departmentId;
+}
+
+public function getDepartment(): string
+    {
+        $id = $this->getDepartmentId();
+        $dbcon = Db::getDbconnection();
+
+        $stmnt = "SELECT name FROM department where id = :id";
+        $select_stm = $dbcon->prepare($stmnt);
+        $select_stm->bindParam(":id", $id, PDO::PARAM_INT);
+        $select_stm->execute();
+        $dpName = $select_stm->fetch(PDO::FETCH_ASSOC);
+        return $dpName['name'];
+    }
+
+
     /**
      * Hallo das erstellt uns unsere User
      * @return User[]
@@ -78,7 +99,7 @@ class User implements ICrud
         $userarray = $select_stm->fetchAll(PDO::FETCH_ASSOC);
         $userObjects = [];
         foreach ($userarray as $item) {
-            $user =new User($item['bday'],$item['id'],$item['nachname'],$item['vorname']);
+            $user =new User($item['bday'],$item['id'],$item['nachname'],$item['vorname'], $item['department_id']);
             $userObjects[] = $user;
         }
         return $userObjects;

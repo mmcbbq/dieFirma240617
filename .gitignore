@@ -6,6 +6,7 @@
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 config.php
 vendor/
+.vscode/
 logs/log.txt
 # User-specific stuff
 .idea/**/workspace.xml

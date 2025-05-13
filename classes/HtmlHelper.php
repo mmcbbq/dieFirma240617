@@ -37,7 +37,8 @@ class HtmlHelper
                 $htmlTable .= "<td>" . $userObject->getVorname() . "</td>";
                 $htmlTable .= "<td>" . $userObject->getNachname() . "</td>";
                 $htmlTable .= "<td>" . $userObject->getAlter() . "</td>";
-                $htmlTable .= "<td>" . 'TODO' . "</td>";
+                $htmlTable .= "<td>" . $userObject->getDepartment() . "</td>";
+                //$htmlTable .= "<td>" . 'TODO' . "</td>";
                 $htmlTable .= "<td>" . $userObject->delete . "</td>";
                 $htmlTable .= "<td>" . $userObject->zeigeeingabe . "</td>";
                 $htmlTable .= '</tr>';
@@ -74,7 +75,15 @@ class HtmlHelper
         $html .= '</div>';
         $html .= "<div>" . $department->getName();
         $html .= '</div>';
+
         $html .= "<div> Mitarbeiter";
+        //var_dump($department->getUsersFromDb());
+                foreach ($department->getUsersFromDb() as $user)
+        {
+            $vorname = $user->getVorname();
+            $html.= "<div>  </div>";
+
+        }
         $html .= '</div>';
 
         $html .= '</div>';
